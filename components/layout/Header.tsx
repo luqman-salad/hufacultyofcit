@@ -108,7 +108,7 @@ export function Header() {
         <div className="lg:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             {/* FIX: Using a div asChild to prevent <button> inside <button> */}
-            <SheetTrigger asChild>
+            <SheetTrigger >
               <div 
                 className="p-2 transition-colors hover:bg-gray-50 rounded-lg outline-none cursor-pointer"
                 role="button"
