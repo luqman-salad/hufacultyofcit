@@ -10,7 +10,7 @@ import FacultyAdministration from "@/components/layout/FacultyAdministration.tsx
 
 export default function Home() {
   return (
-    <main className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen">
       <Hero />
       <Pillars />
       <DeansWelcome />
@@ -20,6 +20,6 @@ export default function Home() {
       <AcademicNews />
       <FacultyAdministration />
       
-    </main>
+    </div>
   );
 }
