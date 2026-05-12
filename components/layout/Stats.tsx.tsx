@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Users, Briefcase, Globe, graduationCap } from 'lucide-react';
+import { Users, Briefcase, Globe, GraduationCap } from 'lucide-react';
 
 const stats = [
   { label: "Active Students", value: "1,200+", icon: Users },
