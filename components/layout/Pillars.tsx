@@ -1,87 +1,74 @@
 "use client";
 
 import React from 'react';
-import { Laptop, GraduationCap, Microscope } from 'lucide-react';
+import { Laptop, GraduationCap, Microscope, Network } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 const pillars = [
   {
+    id: "01",
     title: "Innovation & Tech",
-    description: "Leading digital transformation through advanced software engineering and AI research.",
+    description: "Leading digital transformation through advanced software engineering architectures and localized machine learning research.",
     icon: Laptop,
-    bgColor: "bg-white",
-    textColor: "text-[#1F2E4F]",
-    iconBg: "bg-[#FDF5EB]",
     iconColor: "text-[#BF833D]",
   },
   {
+    id: "02",
     title: "Academic Excellence",
-    description: "World-class curriculum designed to produce the next generation of global IT leaders.",
+    description: "Rigorous computation curricula engineered to cultivate the next lineage of type-safe systems and data platforms.",
     icon: GraduationCap,
-    bgColor: "bg-white",
-    textColor: "text-[#1F2E4F]",
-    iconBg: "bg-[#FDF5EB]",
     iconColor: "text-[#BF833D]",
   },
   {
+    id: "03",
     title: "Modern Research",
-    description: "Exploring cybersecurity and data science to solve complex regional and global challenges.",
+    description: "Investigating cryptographically secure frameworks and distributed models to safeguard regional infrastructure.",
     icon: Microscope,
-    bgColor: "bg-white",
-    textColor: "text-[#1F2E4F]",
-    iconBg: "bg-[#FDF5EB]",
     iconColor: "text-[#BF833D]",
   },
   {
-    title: "Modern Research",
-    description: "Exploring cybersecurity and data science to solve complex regional and global challenges.",
-    icon: Microscope,
-    bgColor: "bg-white",
-    textColor: "text-[#1F2E4F]",
-    iconBg: "bg-[#FDF5EB]",
+    id: "04",
+    title: "Civic Infrastructure",
+    description: "Translating theoretical computation into functional software systems built for public scaling and enterprise utility.",
+    icon: Network,
     iconColor: "text-[#BF833D]",
   },
-
 ];
 
 export const Pillars = () => {
   return (
-    <section className="relative z-20 max-w-[1240px] mx-auto px-6 -mt-16 md:-mt-24">
-      <div className="grid grid-cols-1 md:grid-cols-4 shadow-2xl rounded-xl overflow-hidden border border-gray-100">
+    <section className="relative z-30 max-w-[1200px] mx-auto px-6 md:px-8 -mt-20 md:-mt-28">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-gray-200/70 border border-gray-200/70 rounded-xl overflow-hidden bg-white shadow-[0_16px_45px_rgba(26,43,74,0.04)]">
         {pillars.map((pillar, index) => {
           const Icon = pillar.icon;
           return (
             <div 
               key={index}
-              className={cn(
-                "p-10 flex flex-col items-center text-center transition-all duration-300 group",
-                pillar.bgColor,
-                pillar.textColor
-              )}
+              className="p-8 md:p-9 bg-white hover:bg-[#FAFBFB] transition-all duration-300 flex flex-col justify-between group"
             >
-              {/* Icon Container */}
-              <div className={cn(
-                "w-16 h-16 rounded-full flex items-center justify-center mb-6 transition-transform group-hover:scale-110",
-                pillar.iconBg
-              )}>
-                <Icon className={cn("w-8 h-8", pillar.iconColor)} />
+              <div>
+                {/* Meta Header Index */}
+                <div className="flex items-center justify-between mb-8">
+                  <span className="font-mono text-[10px] text-gray-400 font-semibold tracking-widest">
+                    [{pillar.id}]
+                  </span>
+                  <div className={cn("text-gray-400 group-hover:scale-105 transition-all duration-300", pillar.iconColor)}>
+                    <Icon className="w-5 h-5 stroke-[1.5]" />
+                  </div>
+                </div>
+
+                {/* Structural Typography Block */}
+                <h3 className="text-[#1a2b4a] text-base font-bold tracking-tight mb-3 group-hover:text-[#E31E24] transition-colors duration-300">
+                  {pillar.title}
+                </h3>
+                
+                <p className="text-gray-500 font-light text-xs md:text-[13px] leading-relaxed tracking-normal">
+                  {pillar.description}
+                </p>
               </div>
 
-              {/* Text Content */}
-              <h3 className="text-xl font-bold uppercase tracking-wider mb-4">
-                {pillar.title}
-              </h3>
-              <p className={cn(
-                "text-sm leading-relaxed opacity-80",
-                pillar.bgColor === "bg-white" ? "text-gray-600" : "text-white/90"
-              )}>
-                {pillar.description}
-              </p>
-
-              {/* Subtle Bottom Accent for White Cards */}
-              {pillar.bgColor === "bg-white" && (
-                <div className="mt-8 w-10 h-1 bg-[#E31E24] opacity-0 group-hover:opacity-100 transition-opacity" />
-              )}
+              {/* Minimal Line Base Accent Rule */}
+              <div className="pt-6 mt-6 border-t border-gray-100/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
             </div>
           );
         })}
