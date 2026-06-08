@@ -3,6 +3,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { Menu, ChevronDown, X, Phone, Mail } from "lucide-react"; 
+import { client } from "@/sanity/lib/client";
+import { groq } from "next-sanity";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -22,36 +24,83 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
-const navData = [
-  { 
-    label: "Home", 
-    children: [
-      { title: "Dean's Message", href: "/dean-message" },
-      { title: "Vision & Mission", href: "/vision-mission" },
-    ] 
-  },
-  {
-    label: "About",
-    children: [
-      { title: "Facilities", href: "/about/facilities" },
-      { title: "Faculty History", href: "/about/history" },
-    ],
-  },
-  {
-    label: "Academic",
-    children: [
-      { title: "B.Sc. in Computer Applications", href: "/departments/computer-applications" },
-      { title: "B.Sc. in Computer Networking & Security", href: "/departments/networking-security" },
-      { title: "B.Sc. in Computer Multimedia", href: "/departments/multimedia" },
-    ],
-  },
-  { label: "Research", href: "/research" },
-  { label: "Staff", href: "/staff" },
-  { label: "Contact", href: "/contact" },
-];
+// Minimal type structure for incoming Sanity documents
+interface SanityDepartmentItem {
+  title: string;
+  slug: { current: string };
+}
+
+interface NavChild {
+  title: string;
+  href: string;
+}
+
+interface NavItem {
+  label: string;
+  href?: string;
+  children?: NavChild[];
+}
 
 export function Header() {
   const [open, setOpen] = React.useState(false);
+  
+  // Set up local state initialization with your original static routes as a fallback template
+  const [academicChildren, setAcademicChildren] = React.useState<NavChild[]>([
+    { title: "B.Sc. in Computer Applications", href: "/departments/computer-applications" },
+    { title: "B.Sc. in Computer Networking & Security", href: "/departments/networking-security" },
+    { title: "B.Sc. in Computer Multimedia", href: "/departments/multimedia" },
+  ]);
+
+  // Fetch live departments immediately on mount
+  React.useEffect(() => {
+    async function fetchLiveDepartments() {
+      try {
+        const query = groq`*[_type == "department" && defined(slug.current)]{
+          title,
+          slug
+        }`;
+        const rawData: SanityDepartmentItem[] = await client.fetch(query);
+        
+        if (rawData && rawData.length > 0) {
+          // Format Sanity data cleanly into NavChild elements
+          const formattedDepartments = rawData.map((dept) => ({
+            title: dept.title,
+            href: `/departments/${dept.slug.current}`,
+          }));
+          setAcademicChildren(formattedDepartments);
+        }
+      } catch (error) {
+        console.error("Failed to load departments from Sanity client, using layout fallbacks:", error);
+      }
+    }
+
+    fetchLiveDepartments();
+  }, []);
+
+  // Compute navigation tree dynamically
+  const navData: NavItem[] = [
+    { 
+      label: "Home", 
+      children: [
+        { title: "Dean's Message", href: "/dean-message" },
+        { title: "Vision & Mission", href: "/vision-mission" },
+      ] 
+    },
+    {
+      label: "About",
+      children: [
+        { title: "Facilities", href: "/about/facilities" },
+        { title: "Faculty History", href: "/about/history" },
+      ],
+    },
+    {
+      label: "Academic",
+      children: academicChildren, // Safely bound to dynamic live data hooks
+    },
+    { label: "Research", href: "/research" },
+    { label: "Staff", href: "/staff" },
+    { label: "Contact", href: "/contact" },
+  ];
 
   return (
     <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
@@ -81,7 +130,7 @@ export function Header() {
                       {item.label}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="flex flex-col w-[300px] py-1">
+                      <ul className="flex flex-col w-[350px] py-1">
                         {item.children.map((child) => (
                           <ListItem key={child.title} title={child.title} href={child.href} />
                         ))}
@@ -107,8 +156,7 @@ export function Header() {
         {/* Mobile Section */}
         <div className="lg:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
-            {/* FIX: Using a div asChild to prevent <button> inside <button> */}
-            <SheetTrigger >
+            <SheetTrigger>
               <div 
                 className="p-2 transition-colors hover:bg-gray-50 rounded-lg outline-none cursor-pointer"
                 role="button"
