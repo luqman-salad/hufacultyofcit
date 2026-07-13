@@ -10,7 +10,8 @@ import {
   FaBuildingColumns,
   FaUserTie,
   FaCompass,
-  FaLaptopCode 
+  FaCheckDouble,
+  FaChartLine
 } from 'react-icons/fa6'
 
 export const structure: StructureResolver = (S) =>
@@ -42,6 +43,18 @@ export const structure: StructureResolver = (S) =>
                     .schemaType('visionMissionPage')
                     .documentId('visionMissionPage')
                 ),
+                S.listItem()
+                .title('Why Choose Us')
+                .icon(FaCheckDouble)
+                .child(
+                  S.document().schemaType('whyChooseUs').documentId('whyChooseUs')
+                ),
+                S.listItem()
+                .title('Statistics Section')
+                .icon(FaChartLine)
+                .child(
+                  S.document().schemaType('statsSection').documentId('statsSection')
+                ),
             ])
         ),
 
@@ -72,28 +85,14 @@ export const structure: StructureResolver = (S) =>
             ])
         ),
 
-      // 3. DYNAMIC ACADEMIC DROPDOWN GROUP
-      S.listItem()
-        .title('Academic')
-        .icon(FaGraduationCap)
-        .child(
-          S.list()
-            .title('Academic Desk')
-            .items([
-              S.listItem()
-                .title('Manage Departments')
-                .icon(FaLaptopCode)
-                // Removed the broken .description() call to clear ts(2339)
-                .child(
-                  S.documentTypeList('department')
-                    .title('Faculty Departments')
-                ),
-            ])
-        ),
+      // 3. ACADEMIC DEPARTMENTS LIST
+      S.documentTypeListItem('department')
+        .title('Academic Departments')
+        .icon(FaGraduationCap),
 
       // 4. MAIN LINK PAGES (SINGLETONS)
       S.listItem()
-        .title('Research Page')
+        .title('Research')
         .icon(FaFlask)
         .child(
           S.document()
@@ -101,14 +100,9 @@ export const structure: StructureResolver = (S) =>
             .documentId('researchPage')
         ),
 
-      S.listItem()
-        .title('Staff Directory Page')
-        .icon(FaUsers)
-        .child(
-          S.document()
-            .schemaType('staffPage')
-            .documentId('staffPage')
-        ),
+      S.documentTypeListItem('staffPage')
+        .title('Faculty Staff')
+        .icon(FaUsers),
 
       S.listItem()
         .title('Contact Page')
@@ -121,12 +115,14 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // Filter out handled singletons and collections from the bottom fallback list
+      // 5. FALLBACK LIST (Hides already defined items)
       ...S.documentTypeListItems().filter(
         (listItem) =>
           ![
             'deanMessagePage',
             'visionMissionPage',
+            'whyChooseUs',
+            'statsSection',
             'facilitiesPage',
             'historyPage',
             'department', 

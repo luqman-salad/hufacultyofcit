@@ -12,6 +12,7 @@ export default defineType({
       title: "Hero Title",
       type: "string",
       initialValue: "Contact Us",
+      
     }),
     defineField({
       name: "heroImage",

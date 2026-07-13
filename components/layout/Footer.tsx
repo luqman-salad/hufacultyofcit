@@ -9,128 +9,53 @@ import {
   FaLinkedinIn, 
   FaPhoneAlt, 
   FaEnvelope, 
-  FaMapMarkerAlt, 
-  FaFax 
+  FaMapMarkerAlt 
 } from "react-icons/fa";
 
 export const Footer = () => {
-  const latestNews = [
-    {
-      title: "Equity Providence: Connect for Health Info",
-      date: "February 21, 2026",
-      href: "/news/equity-providence"
-    },
-    {
-      title: "Tea with the Alpha Delta Phi Society",
-      date: "December 13, 2025",
-      href: "/news/alpha-delta-phi"
-    }
-  ];
-
-  const galleryImages = [
-    "/images/gallery-1.jpg",
-    "/images/gallery-2.jpg",
-    "/images/gallery-3.jpg",
-    "/images/gallery-4.jpg",
-    "/images/gallery-5.jpg",
-    "/images/gallery-6.jpg",
-  ];
-
   return (
-    <footer className="bg-[#002b34] text-white pt-20 pb-10">
-      <div className="max-w-[1440px] mx-auto px-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+    <footer className="bg-[#1F2E4F] text-white pt-16 pb-8">
+      <div className="max-w-[1200px] mx-auto px-6">
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
           
           {/* 1. Brand Section */}
-          <div className="space-y-8">
-            <div className="flex items-center gap-3">
-              <div className="relative w-12 h-12">
-                 {/* Replace with your HU logo */}
-                 <Image src="/images/logo-white.png" alt="HU Logo" fill className="object-contain" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold leading-none uppercase tracking-tighter">Academic</h2>
-                <p className="text-[10px] uppercase tracking-widest text-gray-400">University & College</p>
-              </div>
-            </div>
-            
-            <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
-              Leading higher education research institution, first of the new wave of U.S. universities founded in the 1960s.
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold uppercase tracking-widest">Faculty of CIT</h2>
+            <p className="text-gray-300 text-sm leading-relaxed max-w-xs">
+              Empowering the next generation of tech innovators through practical education and digital excellence.
             </p>
-
-            <div className="flex items-center gap-4">
-              <Link href="#" className="hover:text-gray-400 transition-colors"><FaFacebookF size={16} /></Link>
-              <Link href="#" className="hover:text-gray-400 transition-colors"><FaTwitter size={16} /></Link>
-              <Link href="#" className="hover:text-gray-400 transition-colors"><FaLinkedinIn size={16} /></Link>
+            <div className="flex items-center gap-4 pt-2">
+              <Link href="#" className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#E31E24] transition-all"><FaFacebookF size={14} /></Link>
+              <Link href="#" className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#E31E24] transition-all"><FaTwitter size={14} /></Link>
+              <Link href="#" className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#E31E24] transition-all"><FaLinkedinIn size={14} /></Link>
             </div>
           </div>
 
-          {/* 2. Contact Us */}
+          {/* 2. Quick Links */}
           <div>
-            <h3 className="text-xl font-bold mb-8 relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-0.5 after:bg-white/20">
-              Contact Us
-            </h3>
-            <ul className="space-y-6">
-              <li className="flex items-start gap-4 group">
-                <FaMapMarkerAlt className="mt-1 text-gray-400 group-hover:text-white transition-colors" />
-                <span className="text-gray-400 text-sm leading-snug">Mogadishu Main Campus, <br />Banadir, Somalia</span>
-              </li>
-              <li className="flex items-center gap-4 group">
-                <FaPhoneAlt className="text-gray-400 group-hover:text-white transition-colors" />
-                <span className="text-gray-400 text-sm">(+252) 61 XXXXXXX</span>
-              </li>
-              <li className="flex items-center gap-4 group">
-                <FaFax className="text-gray-400 group-hover:text-white transition-colors" />
-                <span className="text-gray-400 text-sm">555 345 - 8554</span>
-              </li>
-              <li className="flex items-center gap-4 group">
-                <FaEnvelope className="text-gray-400 group-hover:text-white transition-colors" />
-                <span className="text-gray-400 text-sm">office@academic.com</span>
-              </li>
+            <h3 className="font-bold mb-6 text-[#BF833D] uppercase text-sm tracking-widest">Quick Links</h3>
+            <ul className="space-y-3 text-sm text-gray-300">
+              <li><Link href="/about" className="hover:text-white transition-colors">About Faculty</Link></li>
+              <li><Link href="/staff" className="hover:text-white transition-colors">Staff Directory</Link></li>
+              <li><Link href="/research" className="hover:text-white transition-colors">Research Projects</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition-colors">Admissions</Link></li>
             </ul>
           </div>
 
-          {/* 3. Latest News */}
-          <div>
-            <h3 className="text-xl font-bold mb-8 relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-0.5 after:bg-white/20">
-              Latest News
-            </h3>
-            <div className="space-y-8">
-              {latestNews.map((news, i) => (
-                <div key={i} className="group">
-                  <Link href={news.href} className="block text-sm font-bold leading-tight group-hover:text-gray-300 transition-colors mb-2">
-                    {news.title}
-                  </Link>
-                  <span className="text-xs text-gray-500">{news.date}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 4. Campus Gallery */}
-          <div>
-            <h3 className="text-xl font-bold mb-8 relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-0.5 after:bg-white/20">
-              Campus Gallery
-            </h3>
-            <div className="grid grid-cols-3 gap-2">
-              {galleryImages.map((img, i) => (
-                <div key={i} className="relative aspect-square rounded-sm overflow-hidden group bg-gray-800">
-                  <Image 
-                    src={img} 
-                    alt="Campus" 
-                    fill 
-                    className="object-cover transition-transform group-hover:scale-110 opacity-80 group-hover:opacity-100" 
-                  />
-                </div>
-              ))}
-            </div>
+          {/* 3. Contact Info */}
+          <div className="space-y-4 text-sm text-gray-300">
+            <h3 className="font-bold mb-6 text-[#BF833D] uppercase text-sm tracking-widest">Reach Us</h3>
+            <p className="flex items-center gap-3"><FaMapMarkerAlt className="text-[#E31E24]" /> Mogadishu, Banadir, Somalia</p>
+            <p className="flex items-center gap-3"><FaPhoneAlt className="text-[#E31E24]" /> (+252) 61 XXXXXXX</p>
+            <p className="flex items-center gap-3"><FaEnvelope className="text-[#E31E24]" /> info@cit.edu.so</p>
           </div>
 
         </div>
 
-        {/* Copyright Section */}
-        <div className="pt-10 border-t border-white/5 text-center text-xs text-gray-500 tracking-wider">
-          <p>Copyrights © 2026 All Rights Reserved by Academic. Developed by Luqman</p>
+        {/* Copyright */}
+        <div className="pt-8 border-t border-white/10 text-center text-[11px] text-gray-400 uppercase tracking-widest">
+          <p>© 2026 Faculty of CIT. Designed & Developed by Luqman</p>
         </div>
       </div>
     </footer>

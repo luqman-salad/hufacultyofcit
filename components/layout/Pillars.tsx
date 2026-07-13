@@ -8,67 +8,69 @@ const pillars = [
   {
     id: "01",
     title: "Innovation & Tech",
-    description: "Leading digital transformation through advanced software engineering architectures and localized machine learning research.",
+    description: "Leading digital transformation through advanced software engineering architectures.",
     icon: Laptop,
-    iconColor: "text-[#BF833D]",
+    accent: "group-hover:bg-[#E31E24]",
   },
   {
     id: "02",
     title: "Academic Excellence",
-    description: "Rigorous computation curricula engineered to cultivate the next lineage of type-safe systems and data platforms.",
+    description: "Rigorous computation curricula engineered to cultivate the next lineage of experts.",
     icon: GraduationCap,
-    iconColor: "text-[#BF833D]",
+    accent: "group-hover:bg-[#BF833D]",
   },
   {
     id: "03",
     title: "Modern Research",
-    description: "Investigating cryptographically secure frameworks and distributed models to safeguard regional infrastructure.",
+    description: "Investigating secure frameworks and distributed models for regional infrastructure.",
     icon: Microscope,
-    iconColor: "text-[#BF833D]",
+    accent: "group-hover:bg-[#4c9c6f]",
   },
   {
     id: "04",
     title: "Civic Infrastructure",
-    description: "Translating theoretical computation into functional software systems built for public scaling and enterprise utility.",
+    description: "Translating theoretical computation into functional software for public scaling.",
     icon: Network,
-    iconColor: "text-[#BF833D]",
+    accent: "group-hover:bg-[#1a2b4a]",
   },
 ];
 
 export const Pillars = () => {
   return (
-    <section className="relative z-30 max-w-[1200px] mx-auto px-6 md:px-8 -mt-20 md:-mt-28">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-gray-200/70 border border-gray-200/70 rounded-xl overflow-hidden bg-white shadow-[0_16px_45px_rgba(26,43,74,0.04)]">
+    <section className="relative z-30 max-w-[1200px] mx-auto px-6 -mt-24">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {pillars.map((pillar, index) => {
           const Icon = pillar.icon;
           return (
             <div 
               key={index}
-              className="p-8 md:p-9 bg-white hover:bg-[#FAFBFB] transition-all duration-300 flex flex-col justify-between group"
+              className="group relative bg-white p-8 rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-2 transition-all duration-500 overflow-hidden"
             >
-              <div>
-                {/* Meta Header Index */}
+              {/* Subtle background pulse on hover */}
+              <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500", pillar.accent)} />
+              
+              <div className="relative z-10">
+                {/* Header */}
                 <div className="flex items-center justify-between mb-8">
-                  <span className="font-mono text-[10px] text-gray-400 font-semibold tracking-widest">
-                    [{pillar.id}]
+                  <span className="font-bold text-[10px] text-gray-300 tracking-[0.2em] uppercase">
+                    {pillar.id}
                   </span>
-                  <div className={cn("text-gray-400 group-hover:scale-105 transition-all duration-300", pillar.iconColor)}>
-                    <Icon className="w-5 h-5 stroke-[1.5]" />
+                  <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                    <Icon className="w-5 h-5 text-[#1F2E4F]" />
                   </div>
                 </div>
 
-                {/* Structural Typography Block */}
-                <h3 className="text-[#1a2b4a] text-base font-bold tracking-tight mb-3 group-hover:text-[#E31E24] transition-colors duration-300">
+                {/* Content */}
+                <h3 className="text-[#1a2b4a] text-lg font-black tracking-tight mb-3">
                   {pillar.title}
                 </h3>
-                
-                <p className="text-gray-500 font-light text-xs md:text-[13px] leading-relaxed tracking-normal">
+                <p className="text-gray-500 text-xs leading-relaxed font-medium">
                   {pillar.description}
                 </p>
               </div>
 
-              {/* Minimal Line Base Accent Rule */}
-              <div className="pt-6 mt-6 border-t border-gray-100/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              {/* Bottom decorative bar */}
+              <div className={cn("absolute bottom-0 left-0 h-1 w-0 group-hover:w-full transition-all duration-700 ease-out", pillar.accent)} />
             </div>
           );
         })}
