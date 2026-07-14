@@ -1,31 +1,58 @@
+"use client";
+
+import * as React from "react";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
-import { PortableText } from "@portabletext/react";
+import { PortableText, PortableTextComponents } from "@portabletext/react";
+import { toHTML } from "@portabletext/to-html";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaShareNodes } from "react-icons/fa6";
+import { groq } from "next-sanity";
 
-async function getNewsData(slug: string) {
-  const [news, latestPosts] = await Promise.all([
-    client.fetch(`*[_type == "newsItem" && slug.current == $slug][0]`, { slug }),
-    client.fetch(`*[_type == "newsItem"] | order(publishedAt desc)[0...3]{
-      title, "slug": slug.current, "image": image.asset._ref, publishedAt
-    }`)
-  ]);
-  return { news, latestPosts };
-}
+// Define custom components for Portable Text rendering
+const components: PortableTextComponents = {
+  types: {
+    image: ({ value }) => (
+      <div className="relative w-full aspect-video my-8 rounded-xl overflow-hidden shadow-md">
+        <Image 
+          src={urlFor(value).url()} 
+          alt="Article Image" 
+          fill 
+          className="object-cover" 
+        />
+      </div>
+    ),
+  },
+  block: {
+    h1: ({ children }) => <h1 className="text-3xl font-black text-[#1F2E4F] mt-8 mb-4">{children}</h1>,
+    h2: ({ children }) => <h2 className="text-2xl font-bold text-[#1F2E4F] mt-6 mb-3">{children}</h2>,
+    normal: ({ children }) => <p className="mb-4 text-justify leading-relaxed">{children}</p>,
+  },
+};
 
 export default async function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { news, latestPosts } = await getNewsData(slug);
+
+  // Fetch Data
+  const news = await client.fetch(
+    groq`*[_type == "newsItem" && slug.current == $slug][0]`, 
+    { slug }
+  );
+
+  const latestPosts = await client.fetch(
+    groq`*[_type == "newsItem" && slug.current != $slug] | order(publishedAt desc)[0...3]{
+      title, "slug": slug.current, "image": image.asset._ref, publishedAt
+    }`, 
+    { slug }
+  );
   
   if (!news) notFound();
 
-  // Calculate dynamic reading time (assuming 200 words per minute)
-  const readTime = news.content 
-    ? Math.ceil(JSON.stringify(news.content).split(' ').length / 200) 
-    : 5;
+  // Accurate Read Time Calculation
+  const textContent = news.content ? toHTML(news.content) : "";
+  const readTime = Math.ceil(textContent.split(/\s+/).length / 200) || 1;
 
   return (
     <main className="bg-white py-12 px-6">
@@ -38,7 +65,6 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
           </div>
         )}
 
-        {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-16">
           
           <article>
@@ -59,7 +85,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
                 <div className="w-10 h-10 bg-[#4c9c6f]/20 rounded-full flex items-center justify-center font-bold text-[#4c9c6f]">
                   {news.author?.charAt(0) || 'F'}
                 </div>
-                <span className="font-bold text-sm">
+                <span className="font-bold text-sm text-[#1F2E4F]">
                   {news.author || 'Faculty Admin'} • {readTime} Min Read
                 </span>
               </div>
@@ -68,9 +94,13 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
               </button>
             </div>
 
-            {/* Article Content */}
-            <div className="prose prose-lg max-w-none text-[#4A5568] text-justify">
-              <PortableText value={news.content} />
+            {/* Article Content with Renderer */}
+            <div className="prose prose-lg max-w-none text-[#4A5568]">
+              {news.content ? (
+                <PortableText value={news.content} components={components} />
+              ) : (
+                <p>No content available for this article.</p>
+              )}
             </div>
           </article>
 

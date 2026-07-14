@@ -8,9 +8,9 @@ import researchPage from './research'
 import staffPage from './staffPage'
 import contactPage from './contactPage'
 import whyChooseUs from './whyChooseUs'
-import statsSection from './statsSection'
 import news from './news'
 import facultyAdmins from './facultyAdmins'
+import stats from './stats'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -23,8 +23,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     staffPage,
     contactPage,
     whyChooseUs,
-    statsSection,
     news,
     facultyAdmins,
+    stats,
   ],
 }
