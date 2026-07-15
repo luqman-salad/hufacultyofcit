@@ -2,32 +2,21 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, ChevronDown, X, Phone, Mail } from "lucide-react";
+import { Menu, ChevronDown, X } from "lucide-react";
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
   NavigationMenuList,
+  NavigationMenuItem,
   NavigationMenuTrigger,
+  NavigationMenuContent,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetHeader,
-  SheetTitle,
-  SheetClose,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
-interface SanityDepartmentItem {
-  title: string;
-  slug: { current: string };
-}
-
+// --- Type Definitions ---
 interface NavChild {
   title: string;
   href: string;
@@ -41,152 +30,99 @@ interface NavItem {
 
 export function Header() {
   const [open, setOpen] = React.useState(false);
-
-  // Initialize with fallback links
-  const [academicChildren, setAcademicChildren] = React.useState<NavChild[]>([
-    { title: "B.Sc. in Computer Applications", href: "/departments/computer-applications" },
-    { title: "B.Sc. in Computer Networking & Security", href: "/departments/networking-security" },
-    { title: "B.Sc. in Computer Multimedia", href: "/departments/multimedia" },
-  ]);
+  const [academicChildren, setAcademicChildren] = React.useState<NavChild[]>([]);
 
   React.useEffect(() => {
     async function fetchLiveDepartments() {
       try {
-        const query = groq`*[_type == "department" && defined(slug.current)]{
-          title,
-          slug
-        }`;
-        const rawData: SanityDepartmentItem[] = await client.fetch(query);
-
-        if (rawData && rawData.length > 0) {
-          const formattedDepartments = rawData.map((dept) => ({
-            title: dept.title,
-            href: `/departments/${dept.slug.current}`,
-          }));
-          setAcademicChildren(formattedDepartments);
+        const query = groq`*[_type == "department" && defined(slug.current)]{ title, slug }`;
+        const data = await client.fetch(query);
+        if (data) {
+          setAcademicChildren(data.map((d: any) => ({ 
+            title: d.title, 
+            href: `/departments/${d.slug.current}` 
+          })));
         }
-      } catch (error) {
-        console.error("Failed to load departments, keeping fallbacks:", error);
+      } catch (err) {
+        console.error("Error fetching departments:", err);
       }
     }
-
     fetchLiveDepartments();
   }, []);
 
-  // navData is computed during every render, ensuring it uses the latest academicChildren state
   const navData: NavItem[] = [
-    {
-      label: "Home",
-      children: [
-        { title: "Dean's Message", href: "/dean-message" },
-        { title: "Vision & Mission", href: "/vision-mission" },
-      ],
-    },
-    {
-      label: "About",
-      children: [
-        { title: "Facilities", href: "/about/facilities" },
-        { title: "Faculty History", href: "/about/history" },
-      ],
-    },
-    {
-      label: "Academic",
-      children: academicChildren,
-    },
+    { label: "Home", children: [{ title: "Dean's Message", href: "/dean-message" }, { title: "Vision & Mission", href: "/vision-mission" }] },
+    { label: "About", children: [{ title: "Facilities", href: "/about/facilities" }, { title: "Faculty History", href: "/about/history" }] },
+    { label: "Academic", children: academicChildren },
     { label: "Research", href: "/research" },
     { label: "Staff", href: "/staff" },
     { label: "Contact", href: "/contact" },
   ];
 
   return (
-    <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
-      <div className="max-w-[1440px] mx-auto flex items-center justify-between py-5 px-10">
-        {/* Logo Section */}
+    <header className="w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
+      <div className="max-w-[1440px] mx-auto flex items-center justify-between py-4 px-6 md:px-10">
+        
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="text-[#BF833D] w-10 h-10">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-              <path d="M20 18H4V6h16v12zM4 4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3h6l-2-3h7c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4z" />
-            </svg>
+          <div className="text-[#BF833D] w-8 h-8 md:w-10 md:h-10">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full"><path d="M20 18H4V6h16v12zM4 4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3h6l-2-3h7c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4z" /></svg>
           </div>
-          <div className="flex flex-col text-[#1F2E4F]">
-            <span className="font-bold text-[12px] md:text-[14px] leading-tight uppercase tracking-tight">Faculty of Computer &</span>
-            <span className="font-bold text-[12px] md:text-[14px] leading-tight uppercase tracking-tight">Information Technology</span>
-          </div>
+          <span className="font-black text-[12px] uppercase tracking-tighter text-[#1F2E4F]">Faculty of Computer & IT</span>
         </Link>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Nav */}
         <NavigationMenu className="hidden lg:flex">
-          <NavigationMenuList className="gap-2">
+          <NavigationMenuList className="gap-1">
             {navData.map((item) => (
               <NavigationMenuItem key={item.label}>
                 {item.children ? (
                   <>
-                    <NavigationMenuTrigger className="text-[#1F2E4F] font-bold text-[14px] bg-transparent hover:bg-transparent data-[state=open]:bg-transparent uppercase tracking-tight">
-                      {item.label}
-                    </NavigationMenuTrigger>
+                    <NavigationMenuTrigger className="text-[#1F2E4F] font-bold text-[13px] bg-transparent hover:bg-gray-50 uppercase tracking-tight">{item.label}</NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="flex flex-col w-[350px] py-1">
-                        {item.children.map((child) => (
-                          <ListItem key={child.title} title={child.title} href={child.href} />
-                        ))}
+                      <ul className="grid w-[240px] p-2 bg-white">
+                        {item.children.map((c) => <ListItem key={c.title} title={c.title} href={c.href} />)}
                       </ul>
                     </NavigationMenuContent>
                   </>
                 ) : (
-                  <Link
-                    href={item.href || "#"}
-                    className={cn(navigationMenuTriggerStyle(), "text-[#1F2E4F] font-bold text-[14px] bg-transparent uppercase tracking-tight")}
-                  >
-                    {item.label}
-                  </Link>
+                  <Link href={item.href || "#"} className={cn(navigationMenuTriggerStyle(), "bg-transparent text-[13px] font-bold uppercase hover:bg-gray-50")}>{item.label}</Link>
                 )}
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>
         </NavigationMenu>
 
-        {/* Mobile Section */}
+        {/* Mobile Nav Trigger */}
         <div className="lg:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger>
-              <div className="p-2 transition-colors hover:bg-gray-50 rounded-lg outline-none cursor-pointer" role="button" tabIndex={0} aria-label="Open Menu">
-                <Menu className="w-7 h-7 text-[#1F2E4F]" />
-              </div>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-full sm:max-w-md p-0 border-l-0 bg-[#F9FAFB] flex flex-col">
-              <div className="bg-[#1F2E4F] p-8 text-white relative">
-                <SheetClose className="absolute right-6 top-6 opacity-70 hover:opacity-100 transition-opacity outline-none">
-                  <X className="h-6 w-6" />
-                </SheetClose>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-[#BF833D] rounded-lg flex items-center justify-center font-bold">IT</div>
-                  <div className="flex flex-col text-left">
-                    <SheetTitle className="text-white font-black text-sm uppercase tracking-tighter m-0">Faculty of IT</SheetTitle>
-                    <span className="text-[10px] text-white/60 uppercase tracking-widest font-bold">Hormuud University</span>
-                  </div>
+            <SheetTrigger className="p-2"><Menu className="w-8 h-8 text-[#1F2E4F]" /></SheetTrigger>
+            <SheetContent side="right" className="w-full p-0 bg-white">
+              <div className="flex flex-col h-full">
+                <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                  <span className="text-[#1F2E4F] font-black uppercase tracking-tighter">Menu</span>
+                  <SheetClose className="p-2 bg-gray-100 rounded-full"></SheetClose>
                 </div>
-              </div>
-              <div className="flex-1 overflow-y-auto px-6 py-8">
-                <nav className="space-y-4">
+                
+                <nav className="flex-1 overflow-y-auto px-2 py-4">
                   {navData.map((item) => (
-                    <div key={item.label} className="bg-white rounded-md border border-gray-200 overflow-hidden shadow-sm">
+                    <div key={item.label} className="border-b border-gray-50">
                       {item.children ? (
-                        <details className="group" suppressHydrationWarning>
-                          <summary className="flex items-center justify-between list-none cursor-pointer p-5 group-open:bg-gray-50">
-                            <span className="text-[#1F2E4F] font-black text-sm uppercase tracking-wider">{item.label}</span>
-                            <ChevronDown className="w-4 h-4 text-[#BF833D] group-open:rotate-180 transition-transform duration-300" />
+                        <details className="group">
+                          <summary className="flex items-center justify-between p-5 font-bold text-[#1F2E4F] uppercase text-sm cursor-pointer hover:bg-gray-50">
+                            {item.label}
+                            <ChevronDown className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" />
                           </summary>
-                          <div className="px-5 pb-5 pt-2 flex flex-col gap-4 border-t border-gray-50">
-                            {item.children.map((child) => (
-                              <Link key={child.title} href={child.href} onClick={() => setOpen(false)} className="text-gray-500 hover:text-[#E31E24] font-bold text-[13px] uppercase tracking-tight flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 bg-[#BF833D] rounded-full" />
-                                {child.title}
+                          <div className="bg-gray-50 px-4 py-2">
+                            {item.children.map((c) => (
+                              <Link key={c.title} href={c.href} onClick={() => setOpen(false)} className="block py-3 text-sm font-medium text-gray-600 hover:text-[#E31E24] pl-4 border-l-2 border-gray-200 hover:border-[#E31E24]">
+                                {c.title}
                               </Link>
                             ))}
                           </div>
                         </details>
                       ) : (
-                        <Link href={item.href || "#"} onClick={() => setOpen(false)} className="flex items-center justify-between p-5 text-[#1F2E4F] font-black text-sm uppercase tracking-wider hover:bg-gray-50">
+                        <Link href={item.href || "#"} onClick={() => setOpen(false)} className="block p-5 font-bold text-[#1F2E4F] uppercase text-sm hover:bg-gray-50">
                           {item.label}
                         </Link>
                       )}
@@ -202,13 +138,11 @@ export function Header() {
   );
 }
 
-const ListItem = React.forwardRef<HTMLAnchorElement, React.ComponentPropsWithoutRef<typeof Link> & { title: string }>(({ className, title, href, ...props }, ref) => {
-  return (
-    <li className="w-full list-none">
-      <Link href={href || "#"} ref={ref} className={cn("w-full rounded-md block select-none px-5 py-3 no-underline outline-none transition-all text-[#1F2E4F] font-semibold text-[13px] hover:bg-[#E31E24] hover:text-white", className)} {...props}>
-        {title}
-      </Link>
-    </li>
-  );
-});
+const ListItem = React.forwardRef<HTMLAnchorElement, React.ComponentPropsWithoutRef<typeof Link> & { title: string }>(({ className, title, href, ...props }, ref) => (
+  <li>
+    <Link href={href || "#"} ref={ref} className={cn("block px-4 py-3 text-sm font-medium text-[#1F2E4F] hover:bg-gray-50 hover:text-[#E31E24] transition-colors", className)} {...props}>
+      {title}
+    </Link>
+  </li>
+));
 ListItem.displayName = "ListItem";
