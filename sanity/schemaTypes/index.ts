@@ -11,6 +11,8 @@ import whyChooseUs from './whyChooseUs'
 import news from './news'
 import facultyAdmins from './facultyAdmins'
 import stats from './stats'
+import course from './course'
+import lab from './lab'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -26,5 +28,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     news,
     facultyAdmins,
     stats,
+    course,
+    lab,
   ],
 }

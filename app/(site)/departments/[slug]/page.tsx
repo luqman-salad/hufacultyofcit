@@ -15,38 +15,42 @@ async function getDepartmentData(slug: string) {
     title,
     description,
     duration,
-    type,
     level,
-    monthlyFees,
     semesterFees,
     requirements,
     learningOutcomes,
-    "backgroundImage": backgroundImage.asset->url,
+    "backgroundImage": heroImage.asset->url,
+    
+    // Dereference courses
     curriculum[]{
-      semester,
-      courses[]{
+      semesterNumber,
+      courses[]->{
         title,
         description,
         type,
         credits,
-        assessment
+        assessment,
+        courseCode
       }
     },
-    faculty[]{
+    
+    // Dereference faculty (using your 'facultyAdmins' schema)
+    faculty[]->{
       name,
       role,
-      exp
+      bio,
+      image
     },
-    labs[]{
+    
+    // Dereference labs
+    labs[]->{
       name,
-      desc,
-      room
+      description,
+      room,
+      capacity
     },
-    careerPaths,
-    latestUpdates[]{
-      title,
-      date
-    }
+    
+    careerPaths
   }`;
 
   return await client.fetch(query, { slug });

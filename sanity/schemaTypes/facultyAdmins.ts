@@ -2,7 +2,7 @@ import { defineField, defineType } from 'sanity';
 import { FaUserTie } from 'react-icons/fa6';
 
 export default defineType({
-  name: 'adminMember',
+  name: 'facultyAdmins',
   title: 'Administration Member',
   type: 'document',
   icon: FaUserTie,

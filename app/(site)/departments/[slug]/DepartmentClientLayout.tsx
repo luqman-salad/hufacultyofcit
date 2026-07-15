@@ -21,7 +21,7 @@ interface Course {
 }
 
 interface SemesterBlock {
-  semester: number;
+  semesterNumber: number;
   courses: Course[];
 }
 
@@ -73,7 +73,7 @@ export default function DepartmentClientLayout({ departmentData, resolvedHeroIma
   const liveUpdates = departmentData.latestUpdates || [];
   const liveCareers = departmentData.careerPaths || [];
 
-  const initialSemester = liveCurriculum[0]?.semester || 1;
+  const initialSemester = liveCurriculum[0]?.semesterNumber || 1;
   const initialCourse = liveCurriculum[0]?.courses?.[0] || null;
 
   const [activeSemester, setActiveSemester] = useState<number>(initialSemester);
@@ -82,8 +82,8 @@ export default function DepartmentClientLayout({ departmentData, resolvedHeroIma
   // Synchronize dynamic updates if the dataset updates on the fly
   useEffect(() => {
     if (liveCurriculum.length > 0) {
-      const currentSemData = liveCurriculum.find(s => s.semester === activeSemester) || liveCurriculum[0];
-      setActiveSemester(currentSemData.semester);
+      const currentSemData = liveCurriculum.find(s => s.semesterNumber === activeSemester) || liveCurriculum[0];
+      setActiveSemester(currentSemData.semesterNumber);
       if (currentSemData.courses?.length > 0) {
         setSelectedCourse(currentSemData.courses[0]);
       }
@@ -92,7 +92,7 @@ export default function DepartmentClientLayout({ departmentData, resolvedHeroIma
 
   const handleSemesterChange = (semNum: number) => {
     setActiveSemester(semNum);
-    const targetSem = liveCurriculum.find(s => s.semester === semNum);
+    const targetSem = liveCurriculum.find(s => s.semesterNumber === semNum);
     if (targetSem && targetSem.courses?.length > 0) {
       setSelectedCourse(targetSem.courses[0]);
     } else {
@@ -190,16 +190,16 @@ export default function DepartmentClientLayout({ departmentData, resolvedHeroIma
                   <div className="flex bg-gray-100/80 p-1.5 rounded-xl self-start max-w-full overflow-scroll scrollbar-none gap-1">
                     {liveCurriculum.map((sem) => (
                       <button
-                        key={sem.semester}
-                        onClick={() => handleSemesterChange(sem.semester)}
+                        key={sem.semesterNumber}
+                        onClick={() => handleSemesterChange(sem.semesterNumber)}
                         className={cn(
                           "px-4 py-2 rounded-lg text-xs font-black tracking-wider uppercase transition-all outline-none whitespace-nowrap",
-                          activeSemester === sem.semester 
+                          activeSemester === sem.semesterNumber 
                             ? "bg-white text-[#1a2b4a] shadow-sm" 
                             : "text-gray-400 hover:text-gray-600"
                         )}
                       >
-                        Sem 0{sem.semester}
+                        Sem 0{sem.semesterNumber}
                       </button>
                     ))}
                   </div>
@@ -211,7 +211,7 @@ export default function DepartmentClientLayout({ departmentData, resolvedHeroIma
                   {/* Left Side Courses Hook */}
                   <div className="md:col-span-7 space-y-3">
                     {liveCurriculum
-                      .find((s) => s.semester === activeSemester)
+                      .find((s) => s.semesterNumber === activeSemester)
                       ?.courses?.map((course, idx) => {
                         const isSelected = selectedCourse?.title === course.title;
                         return (

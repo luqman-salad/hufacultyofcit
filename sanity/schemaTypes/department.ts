@@ -1,5 +1,5 @@
-import { defineField, defineType } from 'sanity'
-import { FaLaptopCode } from 'react-icons/fa'
+import { defineField, defineType } from 'sanity';
+import { FaLaptopCode } from 'react-icons/fa';
 
 export default defineType({
   name: 'department',
@@ -17,7 +17,6 @@ export default defineType({
       name: 'slug',
       title: 'Slug Route Key',
       type: 'slug',
-      description: 'Used for generating dynamic navigation URLs (e.g., bsc-computer-applications)',
       options: { source: 'title', maxLength: 96 },
       validation: (Rule) => Rule.required(),
     }),
@@ -33,7 +32,7 @@ export default defineType({
       type: 'image',
       options: { hotspot: true },
     }),
-    
+
     // Program Stats Core
     defineField({
       name: 'duration',
@@ -57,88 +56,64 @@ export default defineType({
     // Requirements & Learning Outcomes
     defineField({
       name: 'requirements',
-      title: 'Entry & Eligibility Criteria Requirements',
+      title: 'Entry & Eligibility Criteria',
       type: 'array',
       of: [{ type: 'string' }],
     }),
     defineField({
       name: 'learningOutcomes',
-      title: 'Intended Program Learning Outcomes',
+      title: 'Intended Learning Outcomes',
       type: 'array',
       of: [{ type: 'string' }],
     }),
 
-    // Interactive Multi-Semester Array Curriculum Builder
+    // Curriculum: Linked to 'course' documents
     defineField({
       name: 'curriculum',
       title: 'Academic Matrix Curriculum',
       type: 'array',
-      description: 'Add and organize individual modules directly mapped under explicit semester blocks.',
       of: [
         {
           type: 'object',
-          title: 'Semester Curriculum Frame',
+          title: 'Semester Block',
           fields: [
-            { name: 'semesterNumber', title: 'Semester Rank Number (e.g., 1, 2, 3)', type: 'number' },
+            { name: 'semesterNumber', 
+              title: 'Semester Number', 
+              type: 'number',
+              validation: (Rule) => Rule.required().min(1) 
+            },
             {
               name: 'courses',
-              title: 'Semester Course Syllabus List',
+              title: 'Courses in this Semester',
               type: 'array',
-              of: [
-                {
-                  type: 'object',
-                  title: 'Course Module Metadata',
-                  fields: [
-                    { name: 'title', title: 'Course/Module Title', type: 'string' },
-                    { name: 'description', title: 'Syllabus Core Description Summary', type: 'text', rows: 4 },
-                    { name: 'type', title: 'Module Classification (e.g., Core Module, Humanities)', type: 'string', initialValue: 'Core Module' },
-                    { name: 'credits', title: 'Credit Weight (e.g., 4 Credit Hours)', type: 'string' },
-                    { name: 'assessment', title: 'Assessment Rule Style (e.g., Exam + Project)', type: 'string' },
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
+              of: [{ type: 'reference', to: [{ type: 'course' }] }], 
+            },
+          ],
+        },
+      ],
     }),
 
-    // Team Mentorship & Lab Allocations arrays
+    // Faculty: Linked to 'facultyAdmins' documents
     defineField({
       name: 'faculty',
-      title: 'Assigned Department Faculty Leadership',
+      title: 'Department Faculty Leadership',
       type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            { name: 'name', title: 'Professor Name', type: 'string' },
-            { name: 'role', title: 'Academic Title Assignment', type: 'string' },
-            { name: 'exp', title: 'Credentials Degree Summary', type: 'string' },
-          ]
-        }
-      ]
+      of: [{ type: 'reference', to: [{ type: 'facultyAdmins' }] }],
     }),
+
+    // Labs: Linked to 'lab' documents
     defineField({
       name: 'labs',
-      title: 'Allocated Department Infrastructure Labs',
+      title: 'Department Infrastructure Labs',
       type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            { name: 'name', title: 'Lab Name Facility', type: 'string' },
-            { name: 'desc', title: 'Hardware Profile Description', type: 'text' },
-            { name: 'room', title: 'Physical Block Room Coordinates', type: 'string' },
-          ]
-        }
-      ]
+      of: [{ type: 'reference', to: [{ type: 'lab' }] }],
     }),
+
     defineField({
       name: 'careerPaths',
-      title: 'Potential Vocational Career Paths',
+      title: 'Potential Career Paths',
       type: 'array',
       of: [{ type: 'string' }],
     }),
   ],
-})
+});

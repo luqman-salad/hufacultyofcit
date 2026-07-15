@@ -6,20 +6,33 @@ import { Stats } from "@/components/layout/Stats.tsx";
 import {AcademicNews} from "@/components/layout/AcademicNews";
 import { WhyChooseUs } from "@/components/layout/WhyChooseUs";
 import FacultyAdministration from "@/components/layout/FacultyAdministration.tsx";
+import { groq } from "next-sanity";
+import { client } from "@/sanity/lib/client";
 
 
-export default function Home() {
+export default async function Home() {
+  const query = groq`*[_type == "whyChooseUs"][0]{
+    heading,
+    features,
+    videoUrl,
+    "image": image.asset->url
+  }`;
+  
+  const data = await client.fetch(query);
+
   return (
     <div className="bg-white min-h-screen">
       <Hero />
       <Pillars />
       <DeansWelcome />
       <Departments />
-      <WhyChooseUs />
-      <Stats/>
+      
+      {/* Only render if data exists to prevent runtime errors */}
+      {data && <WhyChooseUs data={data} />}
+      
+      <Stats />
       <AcademicNews />
       <FacultyAdministration />
-      
     </div>
   );
 }
