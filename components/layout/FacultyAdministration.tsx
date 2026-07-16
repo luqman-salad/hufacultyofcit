@@ -1,21 +1,13 @@
-import { client } from "@/sanity/lib/client";
-import { urlFor } from "@/sanity/lib/image";
+import React from 'react';
 import Image from "next/image";
 import Link from "next/link";
+import { urlFor } from "@/sanity/lib/image";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa6";
 import { HiEnvelope } from "react-icons/hi2";
 
-// Fetch data directly in the component
-async function getAdminData() {
-  return await client.fetch(`*[_type == "adminMember"]{
-    name, role, office, email, 
-    "image": image.asset._ref,
-    social
-  }`);
-}
-
-export default async function FacultyAdministration() {
-  const administration = await getAdminData();
+export default function FacultyAdministration({ members }: { members: any[] }) {
+  // Safety check: if no members exist, render nothing
+  if (!members || members.length === 0) return null;
 
   return (
     <section className="bg-white py-20 px-6">
@@ -25,12 +17,12 @@ export default async function FacultyAdministration() {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {administration.map((member: any, index: number) => (
+          {members.map((member: any, index: number) => (
             <div key={index} className="bg-white p-8 rounded-lg border border-gray-100 shadow-sm flex flex-col items-center text-center hover:shadow-lg transition-all">
               <div className="relative w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-white shadow-md">
                 <Image
                   src={urlFor(member.image).url()}
-                  alt={member.name}
+                  alt={member.name || "Administrator"}
                   fill
                   className="object-cover"
                 />

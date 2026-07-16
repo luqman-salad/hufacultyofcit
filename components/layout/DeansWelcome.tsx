@@ -2,22 +2,13 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
-import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
-import { groq } from "next-sanity";
 
-export const DeansWelcome = async () => {
-  // Fetch the data from Sanity
-  const data = await client.fetch(groq`*[_type == "deanMessagePage"][0]{
-    deanName,
-    deanTitle,
-    "deanImage": deanImage.asset._ref,
-    messageParagraphs
-  }`);
-
+// Accept 'data' as a prop instead of fetching it internally
+export const DeansWelcome = ({ data }: { data: any }) => {
   if (!data) return null;
 
-  // Grab the first paragraph for the "shortform" message
+  // Grab the first paragraph
   const shortMessage = data.messageParagraphs && data.messageParagraphs.length > 0 
     ? data.messageParagraphs[0] 
     : "Welcome to our faculty. Please visit the full message page to learn more.";
@@ -44,7 +35,7 @@ export const DeansWelcome = async () => {
               {data.deanImage && (
                 <Image
                   src={urlFor(data.deanImage).url()}
-                  alt={data.deanName}
+                  alt={data.deanName || "Dean of Faculty"}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />

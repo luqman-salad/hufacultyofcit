@@ -1,7 +1,5 @@
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
-import { client } from "@/sanity/lib/client";
-import { groq } from "next-sanity";
 
 // Helper to map string to Icon component
 const getIcon = (name: string) => {
@@ -9,10 +7,9 @@ const getIcon = (name: string) => {
   return IconComponent;
 };
 
-export const Stats = async () => {
-  // Fetch the data from Sanity
-  const data = await client.fetch(groq`*[_type == "statsSection"][0]`);
-
+// Refactored to accept 'data' prop instead of fetching internally
+export const Stats = ({ data }: { data: any }) => {
+  // Safety check: if data or stats are missing, render nothing
   if (!data?.stats) return null;
 
   return (

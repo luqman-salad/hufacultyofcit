@@ -2,22 +2,20 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 
-// Fetch function
-async function getNews() {
-  const query = `*[_type == "newsItem"] | order(publishedAt desc)[0...3]{
-    title,
-    image,
-    excerpt,
-    "slug": slug.current
-  }`;
-  return await client.fetch(query);
+// Define the shape of your news items
+interface NewsItem {
+  title: string;
+  image: any;
+  excerpt: string;
+  slug: string;
 }
 
-export async function AcademicNews() {
-  const newsItems = await getNews();
+// Updated to receive 'items' as a prop
+export const AcademicNews = ({ newsItems }: { newsItems: NewsItem[] }) => {
+  // Safety check: if no items exist, render nothing
+  if (!newsItems || newsItems.length === 0) return null;
 
   return (
     <section className="py-24 bg-white">
@@ -30,7 +28,7 @@ export async function AcademicNews() {
 
         {/* News Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {newsItems.map((item: any, index: number) => (
+          {newsItems.map((item, index) => (
             <div key={index} className="flex flex-col group h-full">
               
               {/* Image Container */}
@@ -73,4 +71,4 @@ export async function AcademicNews() {
       </div>
     </section>
   );
-}
+};

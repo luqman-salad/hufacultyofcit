@@ -2,33 +2,18 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, BookOpen } from 'lucide-react';
-import { client } from "@/sanity/lib/client";
-import { groq } from "next-sanity";
 
-// We define the type based on your schema
 interface Dept {
   title: string;
   description: string;
-  slug: { current: string } | null; // Allow null to match defensive checks
+  slug: { current: string } | null;
   heroImage: string;
 }
 
-// Fetch function: Added defined(slug.current) to ensure we only get valid records
-async function getDepartments() {
-  const query = groq`*[_type == "department" && defined(slug.current)]{
-    title,
-    description,
-    slug,
-    "heroImage": heroImage.asset->url
-  }`;
-  return await client.fetch(query);
-}
-
-export const Departments = async () => {
-  const depts = await getDepartments();
-
+// Now a standard functional component accepting props
+export const Departments = ({ depts }: { depts: Dept[] }) => {
   // Safety check: if depts is null/undefined, render nothing
-  if (!depts) return null;
+  if (!depts || depts.length === 0) return null;
 
   return (
     <section className="py-24 bg-[#F8F9FA]">
@@ -54,7 +39,6 @@ export const Departments = async () => {
         {/* Departments Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {depts.map((dept: Dept, index: number) => {
-            // Final safety check: skip if slug or current is missing
             if (!dept.slug?.current) return null;
 
             return (
@@ -86,7 +70,6 @@ export const Departments = async () => {
                   </p>
                   
                   <Link 
-                    // Using optional chaining here ensures the code never tries to read 'current' on null
                     href={`/departments/${dept.slug?.current}`}
                     className="flex items-center gap-2 text-[#1F2E4F] font-bold text-xs uppercase tracking-widest group/btn"
                   >
