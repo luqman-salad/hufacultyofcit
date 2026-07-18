@@ -9,8 +9,6 @@ import { AcademicNews } from "@/components/layout/AcademicNews";
 import { WhyChooseUs } from "@/components/layout/WhyChooseUs";
 import FacultyAdministration from "@/components/layout/FacultyAdministration";
 
-export const revalidate = 60; // Cache the page for 60 seconds
-
 export default async function Home() {
   const query = groq`{
     "whyChooseUs": *[_type == "whyChooseUs"][0]{ heading, features, videoUrl, "image": image.asset->url },
@@ -18,10 +16,16 @@ export default async function Home() {
     "dean": *[_type == "deanMessagePage"][0]{ deanName, deanTitle, "deanImage": deanImage.asset._ref, messageParagraphs },
     "stats": *[_type == "statsSection"][0],
     "news": *[_type == "newsItem"] | order(publishedAt desc)[0...3]{ title, image, excerpt, "slug": slug.current },
-    "admin": *[_type == "adminMember"]{ name, role, office, email, "image": image.asset._ref, social }
+    "admin": *[_type == "facultyAdmins"]{ name, role, office, email, image, social }
   }`;
 
   const data = await client.fetch(query);
+
+  // LOGGING THE DATA
+  console.log("--- DEBUGGING ADMIN DATA ---");
+  console.log("Total members found:", data.admin ? data.admin.length : "undefined");
+  console.log(JSON.stringify(data.admin, null, 2));
+  console.log("----------------------------");
 
   return (
     <div className="bg-white min-h-screen">
