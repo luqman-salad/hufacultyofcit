@@ -1,10 +1,7 @@
-"use client";
-
 import * as React from "react";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
-import { toHTML } from "@portabletext/to-html";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -50,9 +47,9 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
   
   if (!news) notFound();
 
-  // Accurate Read Time Calculation
-  const textContent = news.content ? toHTML(news.content) : "";
-  const readTime = Math.ceil(textContent.split(/\s+/).length / 200) || 1;
+  // Simple word count for Read Time (Assuming ~200 words per minute)
+  // We use JSON stringify to approximate text length since we are in a server component
+  const readTime = Math.ceil((JSON.stringify(news.content || "").length / 1000)) || 1;
 
   return (
     <main className="bg-white py-12 px-6">
@@ -72,7 +69,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
             <div className="flex items-center gap-2 text-sm text-gray-500 mb-4 uppercase tracking-widest font-bold">
               <span>{news.category || 'Academic News'}</span>
               <span>•</span>
-              <span>{new Date(news.publishedAt).toLocaleDateString()}</span>
+              <span>{news.publishedAt ? new Date(news.publishedAt).toLocaleDateString() : 'Recent'}</span>
             </div>
             
             <h1 className="text-4xl md:text-5xl font-black text-[#1F2E4F] mb-8 leading-tight">
@@ -119,7 +116,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
                         {post.title}
                       </h4>
                       <p className="text-[10px] text-gray-400 mt-1">
-                        {new Date(post.publishedAt).toLocaleDateString()}
+                        {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : ''}
                       </p>
                     </div>
                   </Link>

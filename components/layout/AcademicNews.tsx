@@ -54,17 +54,17 @@ export const AcademicNews = ({ newsItems }: { newsItems: NewsItem[] }) => {
               </p>
 
               {/* Read More Link */}
-              <Link 
-                href={`/news/${item.slug}`}
-                className={cn(
-                  "inline-flex items-center justify-center self-start",
-                  "bg-[#4c9c6f] hover:bg-[#3d835d] text-white",
-                  "px-5 py-2.5 rounded text-[13px] font-semibold uppercase tracking-wide",
-                  "transition-colors duration-200"
-                )}
-              >
-                Read More
-              </Link>
+<Link 
+  href={`/news/${item.slug}`} // This generates /news/your-slug-here
+  className={cn(
+    "inline-flex items-center justify-center self-start",
+    "bg-[#4c9c6f] hover:bg-[#3d835d] text-white",
+    "px-5 py-2.5 rounded text-[13px] font-semibold uppercase tracking-wide",
+    "transition-colors duration-200"
+  )}
+>
+  Read More
+</Link>
             </div>
           ))}
         </div>
