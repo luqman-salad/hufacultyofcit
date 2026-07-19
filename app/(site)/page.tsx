@@ -1,5 +1,4 @@
-import { client } from "@/sanity/lib/client";
-import { groq } from "next-sanity";
+import { Suspense } from "react";
 import { Hero } from "@/components/layout/Hero";
 import { Pillars } from "@/components/layout/Pillars";
 import { DeansWelcome } from "@/components/layout/DeansWelcome";
@@ -8,32 +7,40 @@ import { Stats } from "@/components/layout/Stats";
 import { AcademicNews } from "@/components/layout/AcademicNews";
 import { WhyChooseUs } from "@/components/layout/WhyChooseUs";
 import FacultyAdministration from "@/components/layout/FacultyAdministration";
+import {
+  DeanSkeleton,
+  DepartmentsSkeleton,
+  FacultyAdminSkeleton,
+  NewsSkeleton,
+  StatsSkeleton,
+  WhyChooseUsSkeleton,
+} from "@/components/layout/HomeSkeletons";
 
 export const revalidate = 3600;
 
-export default async function Home() {
-  const query = groq`{
-    "whyChooseUs": *[_type == "whyChooseUs"][0]{ heading, features, videoUrl, image },
-    "departments": *[_type == "department" && defined(slug.current)]{ title, description, slug, "heroImage": heroImage.asset->url },
-    "dean": *[_type == "deanMessagePage"][0]{ deanName, deanTitle, "deanImage": deanImage.asset._ref, messageParagraphs },
-    "stats": *[_type == "statsSection"][0],
-    "news": *[_type == "newsItem"] | order(publishedAt desc)[0...3]{ title, image, excerpt, "slug": slug.current },
-    "admin": *[_type == "facultyAdmins"][0...4]{ name, role, office, email, image, social }
-  }`;
-
-  const data = await client.fetch(query);
-
-  
+export default function Home() {
   return (
     <div className="bg-white min-h-screen">
       <Hero />
       <Pillars />
-      <DeansWelcome data={data.dean} />
-      <Departments depts={data.departments} />
-      <WhyChooseUs data={data.whyChooseUs} />
-      <Stats data={data.stats} />
-      <AcademicNews newsItems={data.news} />
-      <FacultyAdministration members={data.admin} />
+      <Suspense fallback={<DeanSkeleton />}>
+        <DeansWelcome />
+      </Suspense>
+      <Suspense fallback={<DepartmentsSkeleton />}>
+        <Departments />
+      </Suspense>
+      <Suspense fallback={<WhyChooseUsSkeleton />}>
+        <WhyChooseUs />
+      </Suspense>
+      <Suspense fallback={<StatsSkeleton />}>
+        <Stats />
+      </Suspense>
+      <Suspense fallback={<NewsSkeleton />}>
+        <AcademicNews />
+      </Suspense>
+      <Suspense fallback={<FacultyAdminSkeleton />}>
+        <FacultyAdministration />
+      </Suspense>
     </div>
   );
 }

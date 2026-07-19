@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, BookOpen } from 'lucide-react';
+import { client } from "@/sanity/lib/client";
+import { groq } from "next-sanity";
 
 interface Dept {
   title: string;
@@ -10,8 +12,20 @@ interface Dept {
   heroImage: string;
 }
 
-// Now a standard functional component accepting props
-export const Departments = ({ depts }: { depts: Dept[] }) => {
+async function getDepartments() {
+  return client.fetch<Dept[]>(
+    groq`*[_type == "department" && defined(slug.current)] | order(title asc) {
+      title,
+      description,
+      slug,
+      "heroImage": heroImage.asset->url
+    }`
+  );
+}
+
+export const Departments = async () => {
+  const depts = await getDepartments();
+
   // Safety check: if depts is null/undefined, render nothing
   if (!depts || depts.length === 0) return null;
 

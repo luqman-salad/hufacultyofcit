@@ -1,6 +1,8 @@
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 import type { ComponentType } from 'react';
+import { client } from "@/sanity/lib/client";
+import { groq } from "next-sanity";
 
 type StatIcon = ComponentType<{ className?: string }>;
 
@@ -20,7 +22,13 @@ interface StatsData {
   stats?: StatItem[];
 }
 
-export const Stats = ({ data }: { data?: StatsData }) => {
+async function getStats() {
+  return client.fetch<StatsData | null>(groq`*[_type == "statsSection"][0]`);
+}
+
+export const Stats = async () => {
+  const data = await getStats();
+
   // Safety check: if data or stats are missing, render nothing
   if (!data?.stats) return null;
 

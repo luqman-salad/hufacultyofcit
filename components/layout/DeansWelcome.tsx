@@ -2,8 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
+import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import type { SanityImageSource } from "@sanity/image-url";
+import { groq } from "next-sanity";
 
 interface DeanData {
   deanName?: string;
@@ -12,7 +14,20 @@ interface DeanData {
   messageParagraphs?: string[];
 }
 
-export const DeansWelcome = ({ data }: { data?: DeanData }) => {
+async function getDeanData() {
+  return client.fetch<DeanData | null>(
+    groq`*[_type == "deanMessagePage"][0]{
+      deanName,
+      deanTitle,
+      "deanImage": deanImage.asset._ref,
+      messageParagraphs
+    }`
+  );
+}
+
+export const DeansWelcome = async () => {
+  const data = await getDeanData();
+
   if (!data) return null;
 
   // Grab the first paragraph

@@ -1,10 +1,12 @@
 import React from 'react';
 import Image from "next/image";
 import Link from "next/link";
+import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import type { SanityImageSource } from "@sanity/image-url";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa6";
 import { HiEnvelope } from "react-icons/hi2";
+import { groq } from "next-sanity";
 
 interface FacultyAdmin {
   name?: string;
@@ -19,7 +21,22 @@ interface FacultyAdmin {
   };
 }
 
-export default function FacultyAdministration({ members }: { members?: FacultyAdmin[] }) {
+async function getFacultyAdmins() {
+  return client.fetch<FacultyAdmin[]>(
+    groq`*[_type == "facultyAdmins"][0...4]{
+      name,
+      role,
+      office,
+      email,
+      image,
+      social
+    }`
+  );
+}
+
+export default async function FacultyAdministration() {
+  const members = await getFacultyAdmins();
+
   // Safety check: if no members exist, render nothing
   if (!members || members.length === 0) return null;
 

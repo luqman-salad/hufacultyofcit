@@ -2,8 +2,10 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import type { SanityImageSource } from "@sanity/image-url";
+import { groq } from "next-sanity";
 
 // Define the shape of your news items
 interface NewsItem {
@@ -13,8 +15,20 @@ interface NewsItem {
   slug: string;
 }
 
-// Updated to receive 'items' as a prop
-export const AcademicNews = ({ newsItems }: { newsItems: NewsItem[] }) => {
+async function getNewsItems() {
+  return client.fetch<NewsItem[]>(
+    groq`*[_type == "newsItem"] | order(publishedAt desc)[0...3] {
+      title,
+      image,
+      excerpt,
+      "slug": slug.current
+    }`
+  );
+}
+
+export const AcademicNews = async () => {
+  const newsItems = await getNewsItems();
+
   // Safety check: if no items exist, render nothing
   if (!newsItems || newsItems.length === 0) return null;
 
