@@ -27,7 +27,7 @@ export const Footer = () => {
           <div>
             <h3 className="font-bold mb-6 text-[#BF833D] uppercase text-sm tracking-widest">Quick Links</h3>
             <ul className="space-y-3 text-sm text-gray-300">
-              <li><Link href="/about" className="hover:text-white transition-colors">About Faculty</Link></li>
+              <li><Link href="/about/history" className="hover:text-white transition-colors">About Faculty</Link></li>
               <li><Link href="/staff" className="hover:text-white transition-colors">Staff Directory</Link></li>
               <li><Link href="/research" className="hover:text-white transition-colors">Research Projects</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Admissions</Link></li>

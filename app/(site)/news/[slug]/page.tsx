@@ -5,8 +5,8 @@ import { PortableText, PortableTextComponents } from "@portabletext/react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FaShareNodes } from "react-icons/fa6";
 import { groq } from "next-sanity";
+import { ShareButton } from "@/components/layout/ShareButton";
 
 // Define custom components for Portable Text rendering
 const components: PortableTextComponents = {
@@ -14,10 +14,11 @@ const components: PortableTextComponents = {
     image: ({ value }) => (
       <div className="relative w-full aspect-video my-8 rounded-xl overflow-hidden shadow-md">
         <Image 
-          src={urlFor(value).url()} 
+          src={urlFor(value).width(960).height(540).quality(75).url()} 
           alt="Article Image" 
           fill 
           className="object-cover" 
+          sizes="(max-width: 1024px) 100vw, 900px"
         />
       </div>
     ),
@@ -58,7 +59,13 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
         {/* Full Width Thumbnail */}
         {news.image && (
           <div className="relative w-full aspect-[21/9] mb-12 rounded-2xl overflow-hidden shadow-lg">
-            <Image src={urlFor(news.image).url()} alt={news.title} fill className="object-cover" />
+            <Image
+              src={urlFor(news.image).width(1200).height(514).quality(75).url()}
+              alt={news.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 1000px"
+            />
           </div>
         )}
 
@@ -86,9 +93,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
                   {news.author || 'Faculty Admin'} • {readTime} Min Read
                 </span>
               </div>
-              <button className="flex items-center gap-2 text-[#4c9c6f] font-bold text-sm hover:underline">
-                <FaShareNodes /> Share
-              </button>
+              <ShareButton title={news.title} />
             </div>
 
             {/* Article Content with Renderer */}
@@ -107,9 +112,15 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
               <h3 className="font-bold text-[#1F2E4F] mb-6 text-xl border-b pb-2">Latest Posts</h3>
               <div className="flex flex-col gap-6">
                 {latestPosts.map((post: any) => (
-                  <Link href={`/news/${post.slug}`} key={post.slug} className="flex gap-4 group">
+                  <Link href={`/news/${post.slug}`} key={post.slug} prefetch={false} className="flex gap-4 group">
                     <div className="relative w-20 h-16 flex-shrink-0 rounded overflow-hidden">
-                      <Image src={urlFor(post.image).url()} alt={post.title} fill className="object-cover" />
+                      <Image
+                        src={urlFor(post.image).width(160).height(128).quality(70).url()}
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-[#1F2E4F] group-hover:text-[#4c9c6f] line-clamp-2">
