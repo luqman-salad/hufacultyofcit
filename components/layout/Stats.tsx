@@ -1,14 +1,26 @@
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
+import type { ComponentType } from 'react';
+
+type StatIcon = ComponentType<{ className?: string }>;
 
 // Helper to map string to Icon component
 const getIcon = (name: string) => {
-  const IconComponent = (LucideIcons as any)[name] || LucideIcons.HelpCircle;
+  const IconComponent = (LucideIcons as unknown as Record<string, StatIcon>)[name] || LucideIcons.HelpCircle;
   return IconComponent;
 };
 
-// Refactored to accept 'data' prop instead of fetching internally
-export const Stats = ({ data }: { data: any }) => {
+interface StatItem {
+  icon: string;
+  value: string;
+  label: string;
+}
+
+interface StatsData {
+  stats?: StatItem[];
+}
+
+export const Stats = ({ data }: { data?: StatsData }) => {
   // Safety check: if data or stats are missing, render nothing
   if (!data?.stats) return null;
 
@@ -21,7 +33,7 @@ export const Stats = ({ data }: { data: any }) => {
 
       <div className="max-w-[1250px] mx-auto px-6">
         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-          {data.stats.map((stat: any, i: number) => {
+          {data.stats.map((stat, i) => {
             const Icon = getIcon(stat.icon);
             return (
               <div 

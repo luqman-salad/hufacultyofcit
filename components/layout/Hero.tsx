@@ -1,7 +1,6 @@
-"use client";
-
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowRight } from "lucide-react";
 
 export const Hero = () => {
@@ -11,10 +10,11 @@ export const Hero = () => {
       <div className="absolute inset-0 z-0">
         <Image
           src="/hero-computer-lab.png" 
-          alt="Faculty Background"
+          alt=""
           fill
           className="object-cover opacity-50"
-          priority
+          sizes="100vw"
+          preload
         />
         {/* Subtle radial gradient to focus center text */}
         <div className="absolute inset-0 bg-black/40" />
@@ -35,12 +35,13 @@ export const Hero = () => {
             
           </p>
 
-          <button 
-            className="bg-[#E31E24] hover:bg-[#c1181d] text-white px-8 py-4 rounded-md text-[13px] font-bold flex items-center gap-2 transition-all active:scale-95 uppercase tracking-wider"
+          <Link
+            href="/about/history"
+            className="bg-[#E31E24] hover:bg-[#c1181d] text-white px-8 py-4 rounded-md text-[13px] font-bold flex items-center gap-2 transition-all active:scale-95 uppercase tracking-wider max-w-50"
           >
             Learn More
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
       </div>
 

@@ -3,11 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { urlFor } from "@/sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url";
 
 // Define the shape of your news items
 interface NewsItem {
   title: string;
-  image: any;
+  image: SanityImageSource;
   excerpt: string;
   slug: string;
 }
@@ -35,10 +36,11 @@ export const AcademicNews = ({ newsItems }: { newsItems: NewsItem[] }) => {
               <div className="relative aspect-[1.5/1] overflow-hidden rounded-sm mb-6">
                 {item.image && (
                   <Image
-                    src={urlFor(item.image).url()}
+                    src={urlFor(item.image).width(640).height(426).quality(75).url()}
                     alt={item.title || "News image"}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 )}
               </div>

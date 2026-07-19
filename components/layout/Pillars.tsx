@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import { Laptop, GraduationCap, Microscope, Network } from 'lucide-react';
 import { cn } from "@/lib/utils";

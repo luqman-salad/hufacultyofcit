@@ -2,7 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import { InnerHero } from "@/components/layout/InnerHero";
 import { client } from "@/sanity/lib/client";
-import imageUrlBuilder from "@sanity/image-url";
+import { urlFor as imageUrlFor } from "@/sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url";
 import { 
   FaChalkboardUser, 
   FaMicrochip, 
@@ -12,9 +13,7 @@ import {
   FaLaptopCode
 } from "react-icons/fa6";
 
-// Instantiate the localized image builder pipeline
-const builder = imageUrlBuilder(client);
-const urlFor = (source: any) => builder.image(source).url();
+const urlFor = (source: SanityImageSource) => imageUrlFor(source).url();
 
 // Dynamic Icon Registry Resolver Map matching your schema keys
 const iconMap: Record<string, React.ReactNode> = {

@@ -3,9 +3,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { urlFor } from "@/sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url";
 
-// Accept 'data' as a prop instead of fetching it internally
-export const DeansWelcome = ({ data }: { data: any }) => {
+interface DeanData {
+  deanName?: string;
+  deanTitle?: string;
+  deanImage?: SanityImageSource;
+  messageParagraphs?: string[];
+}
+
+export const DeansWelcome = ({ data }: { data?: DeanData }) => {
   if (!data) return null;
 
   // Grab the first paragraph
@@ -20,7 +27,7 @@ export const DeansWelcome = ({ data }: { data: any }) => {
         {/* Header Section */}
         <div className="mb-16 border-b border-gray-200 pb-10">
           <span className="text-[#E31E24] font-bold text-sm tracking-[0.2em] uppercase mb-3 block">
-            Dean's Perspective
+            Dean&apos;s Perspective
           </span>
           <h2 className="text-3xl md:text-5xl font-bold text-[#1F2E4F] tracking-tight">
             Message from the <span className="text-[#BF833D]">Faculty Dean</span>
@@ -34,10 +41,11 @@ export const DeansWelcome = ({ data }: { data: any }) => {
             <div className="aspect-square relative overflow-hidden rounded-2xl bg-gray-100 shadow-xl">
               {data.deanImage && (
                 <Image
-                  src={urlFor(data.deanImage).url()}
+                  src={urlFor(data.deanImage).width(720).height(720).quality(75).url()}
                   alt={data.deanName || "Dean of Faculty"}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 1024px) 100vw, 560px"
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-[#1F2E4F]/60 to-transparent" />

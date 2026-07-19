@@ -1,7 +1,8 @@
 import React from 'react';
 import { InnerHero } from "@/components/layout/InnerHero";
 import { client } from "@/sanity/lib/client";
-import imageUrlBuilder from "@sanity/image-url";
+import { urlFor as imageUrlFor } from "@/sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url";
 import { 
   FaEye, 
   FaBullseye, 
@@ -11,8 +12,7 @@ import {
   FaGraduationCap 
 } from "react-icons/fa6";
 
-const builder = imageUrlBuilder(client);
-const urlFor = (source: any) => builder.image(source).url();
+const urlFor = (source: SanityImageSource) => imageUrlFor(source).url();
 
 // Icon map matching our schema keys with your custom styles
 const iconMap: Record<string, React.ReactNode> = {

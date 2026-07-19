@@ -2,10 +2,24 @@ import React from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa6";
 import { HiEnvelope } from "react-icons/hi2";
 
-export default function FacultyAdministration({ members }: { members: any[] }) {
+interface FacultyAdmin {
+  name?: string;
+  role?: string;
+  office?: string;
+  email?: string;
+  image: SanityImageSource;
+  social?: {
+    facebook?: string;
+    twitter?: string;
+    linkedin?: string;
+  };
+}
+
+export default function FacultyAdministration({ members }: { members?: FacultyAdmin[] }) {
   // Safety check: if no members exist, render nothing
   if (!members || members.length === 0) return null;
 
@@ -17,14 +31,15 @@ export default function FacultyAdministration({ members }: { members: any[] }) {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {members.map((member: any, index: number) => (
+          {members.map((member, index) => (
             <div key={index} className="bg-white p-8 rounded-lg border border-gray-100 shadow-sm flex flex-col items-center text-center hover:shadow-lg transition-all">
               <div className="relative w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-white shadow-md">
                 <Image
-                  src={urlFor(member.image).url()}
+                  src={urlFor(member.image).width(256).height(256).quality(75).url()}
                   alt={member.name || "Administrator"}
                   fill
                   className="object-cover"
+                  sizes="128px"
                 />
               </div>
 
@@ -36,7 +51,7 @@ export default function FacultyAdministration({ members }: { members: any[] }) {
                 {member.social?.facebook && <Link href={member.social.facebook}><FaFacebookF size={18} /></Link>}
                 {member.social?.twitter && <Link href={member.social.twitter}><FaTwitter size={18} /></Link>}
                 {member.social?.linkedin && <Link href={member.social.linkedin}><FaLinkedinIn size={18} /></Link>}
-                <Link href={`mailto:${member.email}`} className="text-[#a0aec0] hover:text-[#4c9c6f]"><HiEnvelope size={20} /></Link>
+                {member.email && <Link href={`mailto:${member.email}`} className="text-[#a0aec0] hover:text-[#4c9c6f]"><HiEnvelope size={20} /></Link>}
               </div>
             </div>
           ))}

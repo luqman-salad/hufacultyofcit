@@ -9,9 +9,11 @@ import { AcademicNews } from "@/components/layout/AcademicNews";
 import { WhyChooseUs } from "@/components/layout/WhyChooseUs";
 import FacultyAdministration from "@/components/layout/FacultyAdministration";
 
+export const revalidate = 3600;
+
 export default async function Home() {
   const query = groq`{
-    "whyChooseUs": *[_type == "whyChooseUs"][0]{ heading, features, videoUrl, "image": image.asset->url },
+    "whyChooseUs": *[_type == "whyChooseUs"][0]{ heading, features, videoUrl, image },
     "departments": *[_type == "department" && defined(slug.current)]{ title, description, slug, "heroImage": heroImage.asset->url },
     "dean": *[_type == "deanMessagePage"][0]{ deanName, deanTitle, "deanImage": deanImage.asset._ref, messageParagraphs },
     "stats": *[_type == "statsSection"][0],

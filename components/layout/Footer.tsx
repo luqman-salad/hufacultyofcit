@@ -1,16 +1,7 @@
-"use client";
-
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { 
-  FaFacebookF, 
-  FaTwitter, 
-  FaLinkedinIn, 
-  FaPhoneAlt, 
-  FaEnvelope, 
-  FaMapMarkerAlt 
-} from "react-icons/fa";
+import { Mail, MapPin, Phone } from "lucide-react";
+import { FaFacebookF, FaLinkedinIn, FaTwitter } from "react-icons/fa6";
 
 export const Footer = () => {
   return (
@@ -26,9 +17,9 @@ export const Footer = () => {
               Empowering the next generation of tech innovators through practical education and digital excellence.
             </p>
             <div className="flex items-center gap-4 pt-2">
-              <Link href="#" className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#E31E24] transition-all"><FaFacebookF size={14} /></Link>
-              <Link href="#" className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#E31E24] transition-all"><FaTwitter size={14} /></Link>
-              <Link href="#" className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#E31E24] transition-all"><FaLinkedinIn size={14} /></Link>
+              <Link href="#" aria-label="Faculty Facebook" className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#E31E24] transition-all"><FaFacebookF size={14} /></Link>
+              <Link href="#" aria-label="Faculty Twitter" className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#E31E24] transition-all"><FaTwitter size={14} /></Link>
+              <Link href="#" aria-label="Faculty LinkedIn" className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#E31E24] transition-all"><FaLinkedinIn size={14} /></Link>
             </div>
           </div>
 
@@ -46,9 +37,9 @@ export const Footer = () => {
           {/* 3. Contact Info */}
           <div className="space-y-4 text-sm text-gray-300">
             <h3 className="font-bold mb-6 text-[#BF833D] uppercase text-sm tracking-widest">Reach Us</h3>
-            <p className="flex items-center gap-3"><FaMapMarkerAlt className="text-[#E31E24]" /> Mogadishu, Banadir, Somalia</p>
-            <p className="flex items-center gap-3"><FaPhoneAlt className="text-[#E31E24]" /> (+252) 61 XXXXXXX</p>
-            <p className="flex items-center gap-3"><FaEnvelope className="text-[#E31E24]" /> info@cit.edu.so</p>
+            <p className="flex items-center gap-3"><MapPin className="text-[#E31E24]" size={16} /> Mogadishu, Banadir, Somalia</p>
+            <p className="flex items-center gap-3"><Phone className="text-[#E31E24]" size={16} /> (+252) 61 XXXXXXX</p>
+            <p className="flex items-center gap-3"><Mail className="text-[#E31E24]" size={16} /> info@cit.edu.so</p>
           </div>
 
         </div>

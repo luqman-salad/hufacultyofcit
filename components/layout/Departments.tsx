@@ -52,6 +52,7 @@ export const Departments = ({ depts }: { depts: Dept[] }) => {
                     alt={dept.title || "Department"}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1F2E4F]/80 via-[#1F2E4F]/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
                   

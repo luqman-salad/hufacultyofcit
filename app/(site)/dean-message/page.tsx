@@ -3,12 +3,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { InnerHero } from "@/components/layout/InnerHero";
 import { client } from "@/sanity/lib/client";
-import imageUrlBuilder from "@sanity/image-url";
+import { urlFor as imageUrlFor } from "@/sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url";
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaQuoteLeft } from "react-icons/fa6";
 import { HiEnvelope, HiPhone } from "react-icons/hi2";
 
-const builder = imageUrlBuilder(client);
-const urlFor = (source: any) => builder.image(source).url();
+const urlFor = (source: SanityImageSource) => imageUrlFor(source).url();
 
 async function getDeanMessageData() {
   const query = `*[_type == "deanMessagePage"][0]{
