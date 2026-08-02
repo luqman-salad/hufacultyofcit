@@ -1,9 +1,9 @@
 import { StructureResolver } from 'sanity/structure';
 import { 
-  FaHouse, FaCircleInfo, FaGraduationCap, FaFlask, 
-  FaUsers, FaAddressBook, FaBookOpen, FaBuildingColumns, 
+  FaHouse, FaGraduationCap, FaFlask, 
+  FaAddressBook, FaBookOpen, FaBuildingColumns, 
   FaUserTie, FaCompass, FaCheckDouble, FaChartLine, 
-  FaScrewdriverWrench // Added for Settings
+  FaBook, FaFileLines
 } from 'react-icons/fa6';
 
 export const structure: StructureResolver = (S) =>
@@ -26,7 +26,6 @@ export const structure: StructureResolver = (S) =>
               S.divider(),
               S.listItem().title('Facilities Page').icon(FaBuildingColumns).child(S.document().schemaType('facilitiesPage').documentId('facilitiesPage')),
               S.listItem().title('Faculty History').icon(FaBookOpen).child(S.document().schemaType('historyPage').documentId('historyPage')),
-              S.listItem().title('Research').icon(FaFlask).child(S.document().schemaType('researchPage').documentId('researchPage')),
               S.listItem().title('Contact Page').icon(FaAddressBook).child(S.document().schemaType('contactPage').documentId('contactPage')),
             ])
         ),
@@ -48,13 +47,28 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // 3. FALLBACK (Everything else)
+      // 3. RESEARCH & PUBLICATIONS (Dropdown for Thesis & Journals)
+      S.listItem()
+        .title('Research & Publications')
+        .icon(FaFlask)
+        .child(
+          S.list()
+            .title('Research Repository')
+            .items([
+              S.listItem().title('Journals').icon(FaBook).child(S.document().schemaType('journal').documentId('journalRegistry')),
+              S.listItem().title('Theses').icon(FaFileLines).child(S.document().schemaType('theses').documentId('thesisRegistry')),
+            ])
+        ),
+
+      S.divider(),
+
+      // 4. FALLBACK (Everything else)
       ...S.documentTypeListItems().filter(
         (listItem) =>
           ![
             'deanMessagePage', 'visionMissionPage', 'whyChooseUs', 'statsSection',
             'facilitiesPage', 'historyPage', 'department', 'researchPage',
-            'staffPage', 'contactPage'
+            'staffPage', 'contactPage', 'journal', 'theses'
           ].includes(listItem.getId() || '')
       ),
     ]);

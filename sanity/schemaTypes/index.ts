@@ -4,7 +4,7 @@ import deanMessagePage from './deanMessagePage'
 import visionMissionPage from './visionMissionPage'
 import historyPage from './historyPage'
 import department from './department' 
-import researchPage from './research'
+import researchPage from './theses'
 import staffPage from './staffPage'
 import contactPage from './contactPage'
 import whyChooseUs from './whyChooseUs'
@@ -13,6 +13,7 @@ import facultyAdmins from './facultyAdmins'
 import stats from './stats'
 import course from './course'
 import lab from './lab'
+import journal from './journal'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -30,5 +31,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     stats,
     course,
     lab,
+    journal,
   ],
 }

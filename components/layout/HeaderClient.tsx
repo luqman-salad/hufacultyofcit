@@ -32,7 +32,13 @@ export function HeaderClient({ academicChildren }: { academicChildren: NavChild[
     { label: "Home", children: [{ title: "Dean's Message", href: "/dean-message" }, { title: "Vision & Mission", href: "/vision-mission" }] },
     { label: "About", children: [{ title: "Facilities", href: "/about/facilities" }, { title: "Faculty History", href: "/about/history" }] },
     { label: "Academic", children: academicChildren },
-    { label: "Research", href: "/research" },
+    { 
+      label: "Research", 
+      children: [
+        { title: "Journals", href: "/research/journal" },
+        { title: "Theses", href: "/research/thesis" }
+      ] 
+    },
     { label: "Staff", href: "/staff" },
     { label: "Contact", href: "/contact" },
   ];
