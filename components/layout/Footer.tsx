@@ -46,7 +46,7 @@ export const Footer = () => {
 
         {/* Copyright */}
         <div className="pt-8 border-t border-white/10 text-center text-[11px] text-gray-400 uppercase tracking-widest">
-          <p>© 2026 Faculty of CIT. Designed & Developed by <Link href="https://luqmansalad.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline">Luqman</Link></p>
+          <p>© {new Date().getFullYear()} Faculty of CIT. Designed & Developed by <Link href="https://luqmansalad.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline">Luqman</Link></p>
         </div>
       </div>
     </footer>
